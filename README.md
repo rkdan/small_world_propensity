@@ -1,6 +1,6 @@
 # Small World Propensity
 
-This python package was adapted from the MATLAB package.
+This python package was adapted from the MATLAB package as first presented in [Small-World Propensity and Weighted Brain Networks](https://www.nature.com/articles/srep22057) (2016) by Sarah Feldt Muldoon, Eric W. Bridgeford & Danielle S. Bassett. Their original MATLAB implementation can be found [here](https://kk1995.github.io/BauerLab/BauerLab/MATLAB/lib/+mouse/+graph/smallWorldPropensity.html).
 
 ## Use
 The small-world propensity package can be installed using pip

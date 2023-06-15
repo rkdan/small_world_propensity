@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "small-world-propensity"
+version = "0.1.0"
+description = "A package designed to calculate the small-world propensity of a weighted, undirected network. Translated from the MATLAB version featured in Muldoon et al."
+authors = ["Ryan Daniels"]
+license = "GPL-3.0-only"
+readme = "README.md"
+packages = [{include = "small_world_propensity"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.24.3"
+networkx = "^3.1"
+pandas = "^2.0.2"
+python-igraph = "^0.10.4"
+tqdm = "^4.65.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -170,7 +170,6 @@ def randomize_matrix(A: np.ndarray) -> np.ndarray:
     edge = 0
     for i in range(num_nodes - 1):
         for j in range(i + 1, num_nodes):
-
             A_rand[i, j] = randomized_edges[edge]
             A_rand[j, i] = randomized_edges[edge]
             edge += 1  # Move to next edge

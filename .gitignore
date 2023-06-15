@@ -1,0 +1,8 @@
+.env/
+.venv/
+venv/
+env/
+
+test.ipynb
+
+.DS_Store

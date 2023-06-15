@@ -58,9 +58,8 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           poetry run semantic-release publish
-      - name: Publish to TestPyPI
+      - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
-          password: ${{ secrets.TEST_PYPI_API }}
-          repository_url: https://test.pypi.org/legacy/
+          password: ${{ secrets.PYPI_API }}

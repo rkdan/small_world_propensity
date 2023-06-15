@@ -8,7 +8,7 @@ The small-world propensity package can be installed using pip
 python -m pip install small-world-propensity
 ```
 `small_world_propensity` can be called in two ways: either with a single adjacency matrix, or with a list of adjacency matrices and a boolean list denoting whether each matrix is binary or not. In either case, `small_world_propensity` will return a `pandas` dataframe similar to the following:
-![Dataframe](img/dataframe.png "Dataframe")
+![Dataframe](https://github.com/rkdan/small_world_propensity/blob/main/img/dataframe.png?raw=True)
 
 ## Generation of regular and random matrices
 Using the structural network of the cat cortex obtained from tract-tracing studies between 52 brain regions, we can visualize the process behind the calculation of $\phi$. The matrix is loaded using
@@ -29,13 +29,13 @@ Finally we produce the randomized cat matrix:
 ```
 cat_rand = swp.randomize_matrix(cat_symm)
 ```
-![Cat matrices](img/cat.png "Cat matrices")
+![Cat matrices](https://github.com/rkdan/small_world_propensity/blob/main/img/cat.png?raw=True)
 
 ## Comparison of $\phi$ in real networks
 We can take the networks used in _Muldoon et al_ and plot $\phi$, $\Delta_L$, $\Delta_C$, and $\delta$. Note that these networks are not the exact same as the ones used in _Muldoon et al_, and due to differences in how Numpy performs permutations, and the use of NetworkX and iGraph libraries, the results are not identical, but still match closely.
 
 The adjacency matrices:
-![Adjacency matrices](img/matrices.png "Adjacency matrices")
+![Adjacency matrices](https://github.com/rkdan/small_world_propensity/blob/main/img/matrices.png?raw=True)
 
 And the results:
-![Summary](img/summary.png "Summary")
+![Summary](https://github.com/rkdan/small_world_propensity/blob/main/img/summary.png?raw=True)

@@ -17,7 +17,7 @@ tqdm = "^4.65.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.8.0"
-python-semantic-release = "^7.32.1"
+python-semantic-release = "^7.34.4"
 
 [tool.black]
 line-length = 100

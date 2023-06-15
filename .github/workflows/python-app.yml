@@ -24,10 +24,7 @@ jobs:
           cache: "poetry"
       - name: Install dependencies
         run: poetry install
-      - name: Lint with black
-        run: poetry run black
-      - name: sort imports with isort
-        run: poetry run isort
+
 
   release:
     needs: build

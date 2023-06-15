@@ -15,6 +15,10 @@ pandas = "^2.0.2"
 python-igraph = "^0.10.4"
 tqdm = "^4.65.0"
 
+[tool.poetry.group.dev.dependencies]
+black = "^22.8.0"
+python-semantic-release = "^7.34.4"
+
 [tool.black]
 line-length = 100
 include = '\.pyi?$'

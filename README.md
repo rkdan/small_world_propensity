@@ -1,5 +1,10 @@
 # Small World Propensity
 
+[![GitHub release](https://img.shields.io/github/v/release/rkdan/small_world_propensity?include_prereleases)](https://GitHub.com/rkdan/small_world_propensity/releases)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/small-world-propensity.svg)](https://pypi.python.org/pypi/small-world-propensity/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+
 This python package was adapted from the MATLAB package as first presented in [Small-World Propensity and Weighted Brain Networks](https://www.nature.com/articles/srep22057) (2016) by Sarah Feldt Muldoon, Eric W. Bridgeford & Danielle S. Bassett. Their original MATLAB implementation can be found [here](https://kk1995.github.io/BauerLab/BauerLab/MATLAB/lib/+mouse/+graph/smallWorldPropensity.html).
 
 ## Use
@@ -30,6 +35,10 @@ Finally we produce the randomized cat matrix:
 cat_rand = swp.randomize_matrix(cat_symm)
 ```
 ![Cat matrices](https://github.com/rkdan/small_world_propensity/blob/main/img/cat.png?raw=True)
+
+The graphs visualized in a circular layout look as follows:
+
+![Cat graphs](https://github.com/rkdan/small_world_propensity/blob/main/img/cat_graphs.png?raw=True)
 
 ## Comparison of $\phi$ in real networks
 We can take the networks used in _Muldoon et al_ and plot $\phi$, $\Delta_L$, $\Delta_C$, and $\delta$. Note that these networks are not the exact same as the ones used in _Muldoon et al_, and due to differences in how Numpy performs permutations, and the use of NetworkX and iGraph libraries, the results are not identical, but still match closely.

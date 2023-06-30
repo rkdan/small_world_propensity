@@ -27,14 +27,14 @@ repos:
 #       entry: poetry run safety check --full-report
 #       pass_filenames: false
 #       language: system
-# - repo: local
-#   hooks:
-#     - id: mypy
-#       name: MyPy
-#       entry: poetry run mypy
-#       language: system
-#       types: ['python']
-#       exclude: examples/
+- repo: local
+  hooks:
+    - id: mypy
+      name: MyPy
+      entry: poetry run mypy
+      language: system
+      types: ['python']
+      exclude: examples/
 - repo: local
   hooks:
     - id: pylint

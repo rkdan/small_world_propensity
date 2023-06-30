@@ -21,7 +21,7 @@ classifiers = [
 keywords = ["networks", "graph theory", "small-world"]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.11"
 numpy = "^1.24.3"
 networkx = "^3.1"
 pandas = "^2.0.2"

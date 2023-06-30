@@ -10,12 +10,12 @@ function [SWP,delta_C,delta_L] = small_world_propensity(A, varargin)
 %Inputs:
 %   A           the connectivity matrix, weighted or binary
 %   varargin    a string corresponding to the method of clustering
-%               to be used, where 'O' is Onnela, 'Z' is Zhang,
+%               to be used, where 'O' is Onnela, 'Z' is Zhang, 
 %               'B' is Barrat, 'bin' is binary (default is Onnela).
-%               If the user specifies binary analysis, a
-%               weighted matrix will be converted to a binary matrix
+%               If the user specifies binary analysis, a 
+%               weighted matrix will be converted to a binary matrix 
 %               before proceeding.
-%
+%        
 
 %Outputs:
 %   SWP         the small world propensity of the matrix
@@ -26,7 +26,7 @@ function [SWP,delta_C,delta_L] = small_world_propensity(A, varargin)
 
 %written by Eric Bridgeford and modified by Sarah F. Muldoon
 
-% Reference: Muldoon, Bridgeford, and Bassett (2015) "Small-World Propensity in Weighted,
+% Reference: Muldoon, Bridgeford, and Bassett (2015) "Small-World Propensity in Weighted, 
 %               Real-World Networks" http://arxiv.org/abs/1505.02194
 
 if isempty(varargin)
@@ -34,7 +34,7 @@ if isempty(varargin)
 end
 
 if sum(sum(A)) > 0
-
+    
 bin_matrix = 0;
 if strcmp(varargin{1},'bin') == 1
    bin_matrix = 1;
@@ -52,7 +52,7 @@ else
 end
 
 %calculate the number of nodes
-n = length(W);
+n = length(W);  
 %compute the weighted density of the network
 dens_net = sum(sum(W))/(max(max(W))*n*(n-1));
 
@@ -94,7 +94,7 @@ B = (reg_clus - net_clus);
 if B < 0
     B = 0;
 end
-
+    
 diff_clus = B / (reg_clus - rand_clus);
 if isnan(reg_clus) || isnan(rand_clus) || isnan(net_clus)
     diff_clus = 1;
@@ -119,7 +119,7 @@ end
 %the above code requires the following funcitons
 
 function [Clus] = avg_clus_matrix(W, met)
-%a function to compute the average clusteirng coefficient for a
+%a function to compute the average clusteirng coefficient for a 
 %input matrix M
 
 %Inputs:
@@ -174,7 +174,7 @@ function [C] = clustering_coef_matrix(W, met)
 %improved definition of Onnela Clustering Coefficient, as well as
 %implementation of function for Zhang and Barrat clustering values
 
-%Reference:
+%Reference: 
 %   Onnela et al., Phys. Rev. E71, 065103(R)(2005)
 %   B.Zhang and S. Horvath, Stat. App. Genet. Mol. Biol.4, 17(2005)
 %   Barrat et al., Proc. Natl. Acad. Sci. U.S.A.101, 3747(2004)
@@ -280,28 +280,28 @@ for i=1:num_nodes-1
 end
 end
 
-
+        
 function M = regular_matrix_generator(G,r)
-%generates a regular matrix, with weights obtained form the
+%generates a regular matrix, with weights obtained form the 
 %original adjacency matrix representation of the network
 
 % note that all inputs should be symmeterized prior to forming a regular
 % matrix, since otherwise half of the connnections will be trashed. This
 % can be accomplished with the built in symm_matrix function, however,
-% the function is not performed here so that users can use their own
+% the function is not performed here so that users can use their own 
 % symmeterization procedure.
 
 %Inputs:
 %   G    the adjacency matrix for the given network; must be symmmeterized
-%   r    the approximate radius of the regular network
+%   r    the approximate radius of the regular network 
 
 %Outputs:
-%   M    the regular matrix for the given network, where all
+%   M    the regular matrix for the given network, where all 
 %        weights are sorted such that the inner radius has the
-%        highest weights randomly distributed across the nodes,
+%        highest weights randomly distributed across the nodes, 
 %        and so on
 
-%written by Eric W. Bridgeford
+%written by Eric W. Bridgeford 
 
 n = length(G);
 G = triu(G);
@@ -309,14 +309,14 @@ G = triu(G);
 B = reshape(G,[length(G)^2,1]);
 %sorts the array in descending order
 B = sort(B,'descend');
-%computes the number of connections and adds zeros if
+%computes the number of connections and adds zeros if 
 %numel(G) < 2*n*r
 num_els =ceil(numel(G)/(2*n));
 num_zeros = 2*n*num_els - numel(G);
 %adds zeros to the remaineder of the list, so length(B) = 2*n*r
 B = cat(1,B,zeros(num_zeros,1));
 %reshapes B into a matrix, where the values descend top to
-%bottom, as well as left to right. The greatest value in each
+%bottom, as well as left to right. The greatest value in each 
 %column is less than the smallest value of the column to its left.
 B = reshape(B,[n],[]);
 
@@ -340,8 +340,8 @@ for i = 1:length(G)
         M(y_coor_1,i) = B(a,z);
         %removes the weights from the matrix B so they cannot be
         %reused
-        B(a,z) = 0;
-
+        B(a,z) = 0;      
+        
     end
 end
 end
@@ -367,7 +367,7 @@ function [W] = symm_matrix(A, bin_key)
 % Outputs
 %   W:          The symmeterized matrix
 
-% if binary analysis is specified, let binary symmeterization take place
+% if binary analysis is specified, let binary symmeterization take place 
 
 % written by Eric W. Bridgeford
 
@@ -395,3 +395,9 @@ else
     end
 end
 end
+    
+
+
+
+
+

@@ -1,4 +1,4 @@
-from .small_world_propensity import (
+from small_world_propensity import (
     get_avg_rad_eff,
     make_symmetric,
     randomize_matrix,

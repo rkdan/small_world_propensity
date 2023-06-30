@@ -1,27 +1,59 @@
 [tool.poetry]
 name = "small-world-propensity"
-version = "0.0.2"
+version = "0.1.0"
 description = "A package designed to calculate the small-world propensity of a weighted, undirected network. Translated from the MATLAB version featured in Muldoon et al."
-authors = ["Ryan Daniels"]
-repository = "https://github.com/rkdan/small_world_propensity"
-license = "GPL-3.0-only"
+authors = [
+    "Ryan Daniels",
+]
+license = "GPL-3.0-or-later3"
+repository = "https://github.com/alan-turing-institute/netts"
 readme = "README.md"
-packages = [{include = "small_world_propensity"}]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python :: 3",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+]
+keywords = ["networks", "graph theory", "small-world"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.9"
 numpy = "^1.24.3"
 networkx = "^3.1"
 pandas = "^2.0.2"
 python-igraph = "^0.10.4"
 tqdm = "^4.65.0"
 
-[tool.poetry.group.dev.dependencies]
-black = "^22.8.0"
-python-semantic-release = "^7.34.4"
+[tool.poetry.dev-dependencies]
+isort = "^5.9.3"
+safety = "^1.10.3"
+flake8 = "^3.9.2"
+pylint = "^2.9.6"
+mypy = "^0.910"
+pytest = "^6.2.4"
+pre-commit = "^2.14.0"
+pytest-cov = "^2.12.1"
+pytest-mock = "^3.6.1"
+devtools = {extras = ["pygments"], version = "^0.8.0"}
+black = "^22.3.0"
+mkdocs-click = "^0.7.0"
+mkdocs-material = "^8.2.13"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "WARNING"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "without_cache: marks tests to run that require no netts dependencies cached (deselect with '-m \"not without_cache\"')",
+    "ci_only: marks tests that should only run on ci (deselect with '-m \"not ci_only\"')",
+]
 
 [tool.black]
-line-length = 100
+line-length = 160
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -36,7 +68,7 @@ exclude = '''
     | build
     | dist
   )/
-'''
+  '''
 
 [tool.isort]
 profile = "black"
@@ -46,17 +78,6 @@ include_trailing_comma = true
 virtual_env = ".env"
 skip = ".eggs, .git, .hg, .mypy_cache, .tox, .env, _build, buck-out, build, dist"
 
-[tool.semantic_release]
-version_variable = "pyproject.toml:version" # version location
-branch = "main"                             # branch to make releases of
-changelog_file = "CHANGELOG.md"             # changelog file
-build_command = "poetry build"              # build dists
-dist_path = "dist/"                         # where to put dists
-upload_to_release = true                    # auto-create GitHub release
-upload_to_pypi = false                      # don't auto-upload to PyPI
-remove_dist = false                         # don't remove dists
-patch_without_tag = true                    # patch release by default
-
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

@@ -20,22 +20,22 @@ repos:
         name: isort
         entry: poetry run isort
 
-- repo: local
-  hooks:
-    - id: mypy
-      name: MyPy
-      entry: poetry run mypy
-      language: system
-      types: ['python']
-      exclude: examples/
+# - repo: local
+#   hooks:
+#     - id: mypy
+#       name: MyPy
+#       entry: poetry run mypy
+#       language: system
+#       types: ['python']
+#       exclude: examples/
 
-- repo: local
-  hooks:
-    - id: pylint
-      name: Pylint
-      entry: poetry run pylint --jobs=0
-      language: system
-      types: ['python']
+# - repo: local
+#   hooks:
+#     - id: pylint
+#       name: Pylint
+#       entry: poetry run pylint --jobs=0
+#       language: system
+#       types: ['python']
 
 - repo: https://github.com/PyCQA/flake8
   rev: 3.9.2

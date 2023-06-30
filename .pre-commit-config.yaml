@@ -20,13 +20,6 @@ repos:
         name: isort
         entry: poetry run isort
 
-# - repo: local
-#   hooks:
-#     - id: safety
-#       name: Safety
-#       entry: poetry run safety check --full-report
-#       pass_filenames: false
-#       language: system
 - repo: local
   hooks:
     - id: mypy
@@ -35,6 +28,7 @@ repos:
       language: system
       types: ['python']
       exclude: examples/
+
 - repo: local
   hooks:
     - id: pylint
@@ -49,6 +43,7 @@ repos:
     - id: flake8
       name: Flake8
       entry: poetry run flake8
+
 - repo: https://github.com/igorshubovych/markdownlint-cli
   rev: v0.29.0
   hooks:

@@ -6,6 +6,11 @@ import numpy as np
 import pandas as pd
 import tqdm
 
+# Probably a bad idea...
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning) 
+
+gen = np.random.default_rng(1337)
 
 def small_world_propensity(
     W: Union[np.ndarray, list], bin: Union[bool, list] = False
@@ -49,6 +54,15 @@ def get_average_paths(W: np.ndarray) -> float:
     return L_W
 
 
+def get_clustering_coefficient(W):
+    K = np.where(W > 0, 1, 0).sum(axis=1)
+    W2 = W / W.max()
+    cyc3 = np.diagonal(np.linalg.matrix_power(W2 ** (1/3), 3))
+    K = np.where(cyc3 == 0, np.inf, K)
+    C = cyc3 / (K * K-1)
+
+    return C.mean()
+
 
 def _small_world_propensity(W: np.ndarray, bin: bool = False) -> pd.DataFrame:
     """Finds the small-world propensity and related measures of a single network W.
@@ -75,29 +89,21 @@ def _small_world_propensity(W: np.ndarray, bin: bool = False) -> pd.DataFrame:
 
     avg_rad_eff = get_avg_rad_eff(W)
 
+    # Make regular and random networks
     W_reg = regular_matrix_generator(W, int(avg_rad_eff))
-    G_reg = nx.from_numpy_array(W_reg)
-    for i, j in G_reg.edges():
-        G_reg[i][j]["weight"] = W_reg[i, j]
-
     W_rand = randomize_matrix(W)
-    G_rand = nx.from_numpy_array(W_rand)
-    for i, j in G_rand.edges():
-        G_rand[i][j]["weight"] = W_rand[i, j]
 
     # Clustering
-    C_W = nx.average_clustering(G, weight="weight")
-    C_reg = nx.average_clustering(G_reg, weight="weight")
-    C_rand = nx.average_clustering(G_rand, weight="weight")
+    C_W = get_clustering_coefficient(W)
+    C_reg = get_clustering_coefficient(W_reg)
+    C_rand = get_clustering_coefficient(W_rand)
 
+    # Path lengths
     L_W = get_average_paths(W)
     L_reg = get_average_paths(W_reg)
     L_rand = get_average_paths(W_rand)
 
-    # L_W = nx.average_shortest_path_length(G, weight='weight')
-    # L_reg = nx.average_shortest_path_length(G_reg, weight='weight')
-    # L_rand = nx.average_shortest_path_length(G_rand, weight='weight')
-
+    # Delta L
     A = L_W - L_rand
     if A < 0:
         A = 0
@@ -110,6 +116,9 @@ def _small_world_propensity(W: np.ndarray, bin: bool = False) -> pd.DataFrame:
     if diff_path > 1:
         diff_path = 1
 
+    delta_L = diff_path
+
+    # Delta C
     B = C_reg - C_W
     if B < 0:
         B = 0
@@ -122,8 +131,8 @@ def _small_world_propensity(W: np.ndarray, bin: bool = False) -> pd.DataFrame:
         diff_clus = 1
 
     delta_C = diff_clus
-    delta_L = diff_path
-
+    
+    # Small-world propensity
     SWP = 1 - (np.sqrt((delta_C) ** 2 + (delta_L) ** 2) / np.sqrt(2))
 
     alpha = np.arctan(delta_L / delta_C)
@@ -203,11 +212,11 @@ def regular_matrix_generator(G: np.ndarray, r: int) -> np.ndarray:
 
     for i in range(n):
         for z in range(r):
-            a = np.random.randint(0, n)
+            a = gen.integers(0, n)
             while (B[a, z] == 0 and z != r - 1) or (
                 B[a, z] == 0 and z == r - 1 and len(B[:, r - 1].nonzero()[0]) != 0
             ):
-                a = np.random.randint(0, n)
+                a = gen.integers(0, n)
 
             y_coord = (i + z + 1) % n
             M[i, y_coord] = B[a, z]

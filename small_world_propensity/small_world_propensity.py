@@ -42,6 +42,14 @@ def get_avg_rad_eff(W: np.ndarray) -> int:
     return int(avg_rad_eff)
 
 
+def get_average_paths(W: np.ndarray) -> float:
+    igG = ig.Graph.Weighted_Adjacency((1/W).tolist(), mode="UNDIRECTED")
+    L_W = igG.average_path_length(weights="weight")
+
+    return L_W
+
+
+
 def _small_world_propensity(W: np.ndarray, bin: bool = False) -> pd.DataFrame:
     """Finds the small-world propensity and related measures of a single network W.
 
@@ -82,14 +90,9 @@ def _small_world_propensity(W: np.ndarray, bin: bool = False) -> pd.DataFrame:
     C_reg = nx.average_clustering(G_reg, weight="weight")
     C_rand = nx.average_clustering(G_rand, weight="weight")
 
-    # Path length
-    igG = ig.Graph.Weighted_Adjacency(W.tolist(), mode="UNDIRECTED")
-    igG_reg = ig.Graph.Weighted_Adjacency(W_reg.tolist(), mode="UNDIRECTED")
-    igG_rand = ig.Graph.Weighted_Adjacency(W_rand.tolist(), mode="UNDIRECTED")
-
-    L_W = igG.average_path_length(weights="weight")
-    L_reg = igG_reg.average_path_length(weights="weight")
-    L_rand = igG_rand.average_path_length(weights="weight")
+    L_W = get_average_paths(W)
+    L_reg = get_average_paths(W_reg)
+    L_rand = get_average_paths(W_rand)
 
     # L_W = nx.average_shortest_path_length(G, weight='weight')
     # L_reg = nx.average_shortest_path_length(G_reg, weight='weight')
@@ -165,7 +168,7 @@ def randomize_matrix(A: np.ndarray) -> np.ndarray:
     # Access A with the indices
     orig_edges = A[grab_indices[:, 0], grab_indices[:, 1]]
     num_edges = len(orig_edges)
-    rand_index = np.random.permutation(num_edges)
+    rand_index = np.random.choice(num_edges, num_edges, replace=False)
     randomized_edges = orig_edges[rand_index]
     edge = 0
     for i in range(num_nodes - 1):
@@ -186,14 +189,15 @@ def regular_matrix_generator(G: np.ndarray, r: int) -> np.ndarray:
     Returns:
         np.ndarray: Adjacency matrix of the regularized network.
     """
+
     n = len(G)
     G = np.triu(G)
     B = G.flatten(order="F")
     B = np.sort(B)[::-1]
     num_els = np.ceil(len(B) / (2 * n))
-    # num_zeros = 2 * n * num_els - n * n
-    # B = np.concatenate((B, np.zeros(int(num_zeros))))
-    B = B.reshape((n, n), order="F")
+    num_zeros = 2 * n * num_els - n * n
+    B = np.concatenate((B, np.zeros(int(num_zeros))))
+    B = B.reshape((n, -1), order="F")
 
     M = np.zeros((n, n))
 

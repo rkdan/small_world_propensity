@@ -1,10 +1,10 @@
 from typing import Union
 
-import igraph as ig
-import networkx as nx
 import numpy as np
 import pandas as pd
 import tqdm
+from scipy.sparse import csgraph
+
 
 # Probably a bad idea...
 import warnings
@@ -48,8 +48,8 @@ def get_avg_rad_eff(W: np.ndarray) -> int:
 
 
 def get_average_paths(W: np.ndarray) -> float:
-    igG = ig.Graph.Weighted_Adjacency((1/W).tolist(), mode="UNDIRECTED")
-    L_W = igG.average_path_length(weights="weight")
+    path_matrix = csgraph.shortest_path(1/W, directed=False, unweighted=False)
+    L_W = np.triu(path_matrix).sum() / (len(W) * (len(W) - 1) / 2)
 
     return L_W
 
@@ -80,12 +80,6 @@ def _small_world_propensity(W: np.ndarray, bin: bool = False) -> pd.DataFrame:
         W = make_symmetric(W, bin=bin)
 
     W = W / np.max(W)
-
-    G = nx.from_numpy_array(W)
-
-    # Add edge weights using 'weight' attribute
-    for i, j in G.edges():
-        G[i][j]["weight"] = W[i, j]
 
     avg_rad_eff = get_avg_rad_eff(W)
 

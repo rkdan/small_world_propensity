@@ -1,5 +1,5 @@
 # Small World Propensity
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10299681.svg)](https://doi.org/10.5281/zenodo.10299681)
 [![GitHub release](https://img.shields.io/github/v/release/rkdan/small_world_propensity?include_prereleases)](https://GitHub.com/rkdan/small_world_propensity/releases)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/small-world-propensity.svg)](https://pypi.python.org/pypi/small-world-propensity/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -48,3 +48,29 @@ The adjacency matrices:
 
 And the results:
 ![Summary](https://github.com/rkdan/small_world_propensity/blob/main/img/summary.png?raw=True)
+
+To cite this work, please use:
+```bibtex
+@software{small-world-propensity,
+  author       = {{Daniels, R. K.}},
+  title        = {small-world-propensity},
+  year         = 2023,
+  publisher    = {Zenodo},
+  version      = {v0.0.8},
+  doi          = {10.5281/zenodo.10299681},
+  url          = {https://github.com/rkdan/small-world-propensity}
+}
+```
+Please also cite the authors of the original MATLAB implementation:
+```bibtex
+@article{Muldoon2016,
+    author = "Muldoon, Sarah Feldt and Bridgeford, Eric W. and Bassett, Danielle S.",
+    title = "{Small-World Propensity and Weighted Brain Networks}",
+    doi = "10.1038/srep22057",
+    journal = "Scientific Reports",
+    volume = "6",
+    number = "1",
+    pages = "P07027",
+    year = "2016"
+}
+```

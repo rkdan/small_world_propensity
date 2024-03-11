@@ -61,7 +61,7 @@ jobs:
           poetry run semantic-release publish
           release_version=$(poetry run semantic-release print-version --next)
           echo "New release version: $release_version"
-          echo "::set-output name=release_version::$release_version"
+          echo "release_version=$release_version" >> $GITHUB_ENV
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
@@ -73,8 +73,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.semantic.outputs.release_version }}
-          release_name: v${{ steps.semantic.outputs.release_version }}
+          tag_name: v${{ env.release_version }}
+          release_name: v${{ env.release_version }}
           body: "Description of the release"
           draft: false
           prerelease: false

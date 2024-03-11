@@ -58,8 +58,9 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          new_tag=$(poetry run semantic-release publish | grep "Published release" | awk '{print $NF}')
-          echo "::set-output name=new_tag::$new_tag"
+          poetry run semantic-release publish
+          echo "Semantic Release output:"
+          poetry run semantic-release publish
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

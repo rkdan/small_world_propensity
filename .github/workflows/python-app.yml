@@ -24,6 +24,12 @@ jobs:
           cache: "poetry"
       - name: Install dependencies
         run: poetry install
+      - name: Build distribution packages
+        run: poetry build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
 
 
   release:
@@ -42,6 +48,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
       - name: Install Poetry
         run: pipx install poetry
       - name: Set up Python ${{ matrix.python-version }}

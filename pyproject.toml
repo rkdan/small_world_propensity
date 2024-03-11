@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "small-world-propensity"
-version = "0.1.0"
+version = "0.0.9"
 description = "A package designed to calculate the small-world propensity of a weighted, undirected network. Translated from the MATLAB version featured in Muldoon et al."
 authors = ["Ryan Daniels"]
 repository = "https://github.com/rkdan/small_world_propensity"
@@ -45,7 +45,10 @@ virtual_env = ".env"
 skip = ".eggs, .git, .hg, .mypy_cache, .tox, .env, _build, buck-out, build, dist"
 
 [tool.semantic_release]
-version_variable = "pyproject.toml:version" # version location
+version_variable = [
+    "small_world_propensity/__init__.py:__version__",
+    "pyproject.toml:version",
+]
 branch = "main"                             # branch to make releases of
 changelog_file = "CHANGELOG.md"             # changelog file
 build_command = "poetry build"              # build dists

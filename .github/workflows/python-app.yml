@@ -63,3 +63,14 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API }}
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.semantic.outputs.new_tag }} # Assuming you have the new tag as an output from the semantic-release step
+          release_name: Release ${{ steps.semantic.outputs.new_tag }}
+          body: "Description of the release"
+          draft: false
+          prerelease: false

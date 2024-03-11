@@ -1,3 +1,5 @@
+# Probably a bad idea...
+import warnings
 from typing import Union
 
 import numpy as np
@@ -5,9 +7,6 @@ import pandas as pd
 import tqdm
 from scipy.sparse import csgraph
 
-
-# Probably a bad idea...
-import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning) 
 
 gen = np.random.default_rng(1337)
@@ -48,13 +47,29 @@ def get_avg_rad_eff(W: np.ndarray) -> int:
 
 
 def get_average_paths(W: np.ndarray) -> float:
+    """Get the average path length of a network.
+
+    Args:
+        W (np.ndarray): Adjacency matrix of the network.
+
+    Returns:
+        float: Average path length of the network.
+    """
     path_matrix = csgraph.shortest_path(1/W, directed=False, unweighted=False)
     L_W = np.triu(path_matrix).sum() / (len(W) * (len(W) - 1) / 2)
 
     return L_W
 
 
-def get_clustering_coefficient(W):
+def get_clustering_coefficient(W: np.ndarray) -> float:
+    """Get the clustering coefficient of a network.
+
+    Args:
+        W (np.ndarray): Adjacency matrix of the network.
+
+    Returns:
+        float: Clustering coefficient of the network.
+    """
     K = np.where(W > 0, 1, 0).sum(axis=1)
     W2 = W / W.max()
     cyc3 = np.diagonal(np.linalg.matrix_power(W2 ** (1/3), 3))

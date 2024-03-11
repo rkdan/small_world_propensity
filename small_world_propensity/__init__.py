@@ -1,14 +1,9 @@
-from .small_world_propensity import (
-    get_avg_rad_eff,
-    make_symmetric,
-    randomize_matrix,
-    regular_matrix_generator,
-    small_world_propensity,
-)
+from .small_world_propensity import *
 
-__all__ = [
-    "small_world_propensity",
-    "make_symmetric",
-    "regular_matrix_generator",
-    "randomize_matrix",
-]
+__all__ = ["small_world_propensity",
+           "get_avg_rad_eff",
+           "get_average_paths",
+           "get_clustering_coefficient",
+           "randomize_matrix",
+           "regular_matrix_generator",
+           "make_symmetric"]

@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.0 (2024-03-11)
+
+### Feature
+
+* More efficient path and clustering ([`4a93a8b`](https://github.com/rkdan/small_world_propensity/commit/4a93a8be4dcfd6646c0d44b0f9d868dbd7c74d1d))
+
 ## v0.0.10 (2024-03-11)
 
 

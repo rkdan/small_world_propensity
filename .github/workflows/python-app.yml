@@ -59,8 +59,9 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           poetry run semantic-release publish
-          echo "Semantic Release output:"
-          poetry run semantic-release publish
+          release_version=$(poetry run semantic-release print-version --next)
+          echo "New release version: $release_version"
+          echo "::set-output name=release_version::$release_version"
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
@@ -72,8 +73,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.semantic.outputs.new_tag }} # Assuming you have the new tag as an output from the semantic-release step
-          release_name: Release ${{ steps.semantic.outputs.new_tag }}
+          tag_name: v${{ steps.semantic.outputs.release_version }}
+          release_name: Release v${{ steps.semantic.outputs.release_version }}
           body: "Description of the release"
           draft: false
           prerelease: false
+        

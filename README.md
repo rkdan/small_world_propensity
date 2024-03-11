@@ -74,3 +74,6 @@ Please also cite the authors of the original MATLAB implementation:
     year = "2016"
 }
 ```
+
+> [!NOTE]  
+> This software has a GNU AGPL license. If this license is inadequate for your use, please get in touch.

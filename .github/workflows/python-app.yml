@@ -24,7 +24,7 @@ jobs:
         poetry install
 
     - name: Version Bump and Changelog
-      run: poetry run semantic-release version --verbosity DEBUG
+      run: poetry run semantic-release version --verbosity=DEBUG
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

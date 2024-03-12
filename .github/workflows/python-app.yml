@@ -67,8 +67,11 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          poetry run semantic-release version
-          version=$(poetry version | awk '{print $2}')
+          git fetch --tags --force
+          current_version=$(poetry run semantic-release print-version --current --verbosity=DEBUG)
+          echo "Current version: $current_version"
+          poetry run semantic-release publish --force-fetch --verbosity=DEBUG
+          version=$(poetry version --short)
           echo "Version: $version"
           echo "::set-output name=version::$version"
       - name: Publish to PyPI

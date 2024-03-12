@@ -27,7 +27,7 @@ jobs:
 
     - name: Update Version, Changelog, and Commit Changes
       run: |
-        chmod +x .github/scripts/update_version_and_changelog.sh
+        chmod +x .github/workflows/update_version_and_changelog.sh
         .github/scripts/update_version_and_changelog.sh
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"

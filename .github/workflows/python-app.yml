@@ -1,77 +1,51 @@
-name: Small World Propensity
+name: Publish Package
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-  pull_request:
+    types: [closed]
 
 jobs:
-  release:
+  publish:
+    if: github.event.pull_request.merged == true && github.head_ref == 'dev'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Ensures tags are fetched
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Necessary for tags and history
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+    - name: Setup Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
 
-      - name: Install Poetry
-        run: pipx install poetry
+    - name: Install Dependencies
+      run: |
+        pip install poetry
+        poetry install
 
-      - name: Install dependencies
-        run: poetry install
+    - name: Update Version, Changelog, and Commit Changes
+      run: |
+        chmod +x .github/scripts/update_version_and_changelog.sh
+        .github/scripts/update_version_and_changelog.sh
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pyproject.toml __init__.py CHANGELOG.md
+        git commit -m "Update version and changelog [skip ci]"
+        git tag $(poetry version -s)
+        git push origin HEAD:main --tags
 
-      # Semantic Release: Determine and Apply New Version
-      # Ensure semantic-release is configured to commit and tag the new version
-      - name: Run semantic-release
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          poetry run semantic-release version
-          # Capture the new version number for later steps
-          echo "NEW_VERSION=$(poetry version --short)" >> $GITHUB_ENV
+    - name: Build and Publish to PyPI
+      env:
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API }}
+      run: |
+        poetry build
+        poetry publish
 
-      # Commit and Push Version Changes
-      - name: Commit and Push Changes
-        if: env.NEW_VERSION != ''
-        run: |
-          git add pyproject.toml small_world_propensity/__init__.py CHANGELOG.md
-          git commit -m "chore(release): update to version ${{ env.NEW_VERSION }} [skip ci]"
-          git tag v${{ env.NEW_VERSION }}
-          git push origin main --tags
-
-      # Clean any existing distribution files
-      - name: Clean dist directory
-        run: rm -rf dist/*
-
-      # Build the package with the updated version
-      - name: Build distribution packages
-        run: poetry build
-
-      # Publish to PyPI
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API }}
-
-      # Create GitHub Release
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ env.NEW_VERSION }}
-          release_name: Release v${{ env.NEW_VERSION }}
-          body: "Description of the release v${{ env.NEW_VERSION }}"
-          draft: false
-          prerelease: false
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        TAG_VERSION=$(poetry version -s)
+        gh release create $TAG_VERSION --notes "Release notes here" -t $TAG_VERSION

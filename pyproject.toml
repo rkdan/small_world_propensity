@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "small-world-propensity"
-version = "0.1.11"
+version = "0.1.12"
 description = "A python package designed to calculate the small-world propensity of a weighted, undirected network. Translated from the MATLAB version featured in Muldoon et al."
 authors = ["Ryan Daniels"]
 repository = "https://github.com/rkdan/small_world_propensity"
@@ -49,6 +49,9 @@ version_variable = [
     "small_world_propensity/__init__.py:__version__",
     "pyproject.toml:version",
 ]
+version_toml = [
+    "pyproject.toml:tool.poetry.version"
+]
 branch = "main"
 changelog_file = "CHANGELOG.md"
 build_command = "poetry build"
@@ -61,6 +64,10 @@ changelog_sections = "feature,fix,breaking,documentation"
 changelog_components = "semantic_release.changelog.changelog_headers,semantic_release.changelog.compare_url"
 commit_parser = "semantic_release.history.parser_tag.parse_commit_message"
 version_source = "tag"
+
+[tool.semantic_release.changelog]
+filename = "CHANGELOG.md"
+add_pr_number = true
 
 [build-system]
 requires = ["poetry-core"]

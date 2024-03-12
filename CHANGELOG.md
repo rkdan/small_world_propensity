@@ -1,6 +1,8 @@
 # Changelog
 
 <!--next-version-placeholder-->
+## v0.1.10 (2024-03-12)
+
 
 ## v0.1.8 (2024-03-12)
 

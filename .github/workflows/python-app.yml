@@ -7,67 +7,26 @@ on:
   pull_request:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10"]
-
-    steps:
-      - uses: actions/checkout@v3
-      # Install Poetry
-      - name: Install Poetry
-        run: pipx install poetry
-      # Delete any existing distribution files
-      - name: Clean dist directory
-        run: rm -rf dist/*
-      # Setup Python
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      # Install dependencies
-      - name: Install dependencies
-        run: poetry install
-      # Build the package
-      - name: Build distribution packages
-        run: poetry build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist
-
   release:
-    needs: build
-    permissions:
-      packages: write
-      pull-requests: write
-      contents: write
-      repository-projects: write
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10"]
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-      - uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-      # Install poetry setup python and install dependencies
-      - name: Install Poetry
-        run: pipx install poetry
-      - name: Set up Python ${{ matrix.python-version }}
+          fetch-depth: 0  # Ensures tags are fetched
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: "poetry"
+          python-version: '3.10'
+
+      - name: Install Poetry
+        run: pipx install poetry
+
       - name: Install dependencies
         run: poetry install
-      # Semantic Release
+
       - name: Prepare package for release
         id: semantic
         env:

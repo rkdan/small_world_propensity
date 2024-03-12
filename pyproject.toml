@@ -57,6 +57,10 @@ upload_to_release = true
 upload_to_pypi = false
 remove_dist = false
 patch_without_tag = true
+changelog_sections = "feature,fix,breaking,documentation"
+changelog_components = "semantic_release.changelog.changelog_headers,semantic_release.changelog.compare_url"
+commit_parser = "semantic_release.history.parser_tag.parse_commit_message"
+version_source = "tag"
 
 [build-system]
 requires = ["poetry-core"]

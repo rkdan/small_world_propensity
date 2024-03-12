@@ -73,6 +73,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.semantic-release.outputs.new_release_version }}
-          release_name: Release ${{ steps.semantic-release.outputs.new_release_version }}
+          tag_name: ${{ steps.semantic-release.outputs.new_version }}
+          release_name: Release ${{ steps.semantic-release.outputs.new_version }}
           body: ${{ steps.semantic-release.outputs.changelog }}

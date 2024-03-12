@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "small-world-propensity"
-version = "0.1.6"
+version = "0.1.7"
 description = "A python package designed to calculate the small-world propensity of a weighted, undirected network. Translated from the MATLAB version featured in Muldoon et al."
 authors = ["Ryan Daniels"]
 repository = "https://github.com/rkdan/small_world_propensity"
@@ -57,8 +57,6 @@ upload_to_release = true                    # auto-create GitHub release
 upload_to_pypi = false                      # don't auto-upload to PyPI
 remove_dist = false                         # don't remove dists
 patch_without_tag = true                    # patch release by default
-version_source = "tag"
-current_version = "0.1.6"
 
 [build-system]
 requires = ["poetry-core"]

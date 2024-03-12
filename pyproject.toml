@@ -49,18 +49,22 @@ version_variable = [
     "small_world_propensity/__init__.py:__version__",
     "pyproject.toml:version",
 ]
-branch = "main"
-changelog_file = "CHANGELOG.md"
-build_command = "poetry build"
-dist_path = "dist/"
-upload_to_release = true
-upload_to_pypi = false
-remove_dist = false
-patch_without_tag = true
-changelog_sections = "feature,fix,breaking,documentation"
-changelog_components = "semantic_release.changelog.changelog_headers,semantic_release.changelog.compare_url"
-commit_parser = "semantic_release.history.parser_tag.parse_commit_message"
-version_source = "tag"
+branch = "main"                             # branch to make releases of
+changelog_file = "CHANGELOG.md"             # changelog file
+build_command = "poetry build"              # build dists
+dist_path = "dist/"                         # where to put dists
+upload_to_release = true                    # auto-create GitHub release
+upload_to_pypi = false                      # don't auto-upload to PyPI
+remove_dist = false                         # don't remove dists
+patch_without_tag = true                    # patch release by default
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = [
+   "MAJOR", "MINOR", "PATCH",
+]
+major_tags = ["MAJOR",]
+minor_tags = ["MINOR"]
+patch_tags = ["PATCH"]
 
 [build-system]
 requires = ["poetry-core"]

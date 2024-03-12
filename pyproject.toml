@@ -57,6 +57,8 @@ upload_to_release = true                    # auto-create GitHub release
 upload_to_pypi = false                      # don't auto-upload to PyPI
 remove_dist = false                         # don't remove dists
 patch_without_tag = true                    # patch release by default
+version_source = "tag"
+current_version = "0.1.6"
 
 [build-system]
 requires = ["poetry-core"]

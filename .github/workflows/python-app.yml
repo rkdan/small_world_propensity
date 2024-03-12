@@ -68,8 +68,8 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          output=$(poetry run semantic-release publish --noop)
-          release_version=$(echo "$output" | awk '/New release published:/ {print $NF}' | tr -d '[:space:]')
+          poetry run semantic-release publish
+          release_version=$(poetry run semantic-release print-version --current)
           echo "New release version: $release_version"
           echo "::set-output name=release_version::$release_version"
       - name: Publish to PyPI
@@ -84,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.semantic.outputs.release_version }}
-          release_name: v${{ steps.semantic.outputs.release_version }}
+          release_name: Release v${{ steps.semantic.outputs.release_version }}
           body: "Description of the release"
           draft: false
           prerelease: false

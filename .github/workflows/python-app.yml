@@ -15,23 +15,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      # Install Poetry
       - name: Install Poetry
         run: pipx install poetry
+      # Delete any existing distribution files
       - name: Clean dist directory
         run: rm -rf dist/*
+      # Setup Python
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+      # Install dependencies
       - name: Install dependencies
         run: poetry install
+      # Build the package
       - name: Build distribution packages
         run: poetry build
       - uses: actions/upload-artifact@v2
         with:
           name: dist
           path: dist
-
 
   release:
     needs: build
@@ -53,6 +57,7 @@ jobs:
         with:
           name: dist
           path: dist
+      # Install poetry setup python and install dependencies
       - name: Install Poetry
         run: pipx install poetry
       - name: Set up Python ${{ matrix.python-version }}
@@ -62,6 +67,7 @@ jobs:
           cache: "poetry"
       - name: Install dependencies
         run: poetry install
+      # Semantic Release
       - name: Prepare package for release
         id: semantic
         env:
@@ -76,16 +82,19 @@ jobs:
           version=$(poetry version --short)
           echo "Version: $version"
           echo "::set-output name=version::$version"
+      # Update the changlog, toml and version
       - name: Commit and Push Changes
         run: |
           git add pyproject.toml small_world_propensity/__init__.py CHANGELOG.md
           git commit -m "chore(release): update versions and changelog [skip ci]"
           git push origin ${GITHUB_REF#refs/heads/}
+      # Publish to PyPI
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API }}
+      # Create GitHub Release
       - name: Create GitHub Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/create-release@v1

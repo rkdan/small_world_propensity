@@ -70,7 +70,7 @@ jobs:
           git fetch --tags --force
           current_version=$(poetry run semantic-release print-version --current --verbosity=DEBUG)
           echo "Current version: $current_version"
-          poetry run semantic-release publish --force-fetch --verbosity=DEBUG
+          poetry run semantic-release publish --verbosity=DEBUG
           version=$(poetry version --short)
           echo "Version: $version"
           echo "::set-output name=version::$version"

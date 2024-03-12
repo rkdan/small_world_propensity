@@ -51,28 +51,19 @@ jobs:
           cache: "poetry"
       - name: Install dependencies
         run: poetry install
-      - name: Prepare package for release
-        id: semantic-release
+      - name: Build package
+        run: poetry build
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          NEW_VERSION=$(poetry run semantic-release print-version --current)
-          poetry run semantic-release publish
-          git tag $NEW_VERSION
-          git push origin $NEW_VERSION
-          echo "::set-output name=new_version::$NEW_VERSION"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body: Release ${{ github.ref_name }}
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API }}
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.semantic-release.outputs.new_version }}
-          release_name: Release ${{ steps.semantic-release.outputs.new_version }}
-          body: ${{ steps.semantic-release.outputs.changelog }}

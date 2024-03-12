@@ -55,8 +55,23 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          poetry version patch
+          
+          # Get the commit message
+          commit_message=$(git log -1 --pretty=%B)
+          
+          # Determine the version bump type based on the commit message
+          if echo "$commit_message" | grep -q -i -E '^(break|major)\b'; then
+            version_type="major"
+          elif echo "$commit_message" | grep -q -i -E '^(feat|minor)\b'; then
+            version_type="minor"
+          else
+            version_type="patch"
+          fi
+          
+          # Bump the version using Poetry
+          poetry version $version_type
           version=$(poetry version -s)
+          
           git add pyproject.toml
           git commit -m "Bump version to $version"
           git push

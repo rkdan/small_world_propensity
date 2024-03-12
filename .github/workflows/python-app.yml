@@ -25,7 +25,6 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-
   release:
     needs: build
     permissions:
@@ -42,6 +41,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Poetry
         run: pipx install poetry
       - name: Set up Python ${{ matrix.python-version }}
@@ -52,8 +52,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Prepare package for release
+        id: semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -63,3 +64,11 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.semantic-release.outputs.new_release_version }}
+          release_name: Release ${{ steps.semantic-release.outputs.new_release_version }}
+          body: ${{ steps.semantic-release.outputs.changelog }}

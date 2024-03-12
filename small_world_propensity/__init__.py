@@ -1,7 +1,7 @@
 from .small_world_propensity import *
 
 # version
-__version__ = '0.0.8'
+__version__ = '0.0.11'
 
 __all__ = ["small_world_propensity",
            "get_avg_rad_eff",

@@ -1,51 +1,41 @@
 name: Publish Package
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types: [closed]
 
 jobs:
   publish:
-    if: github.event.pull_request.merged == true && github.head_ref == 'dev'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 0 # Necessary for tags and history
+        fetch-depth: 0  # Important for semantic versioning to work correctly
 
-    - name: Setup Python
-      uses: actions/setup-python@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: Install Dependencies
+    - name: Install dependencies
       run: |
         pip install poetry
         poetry install
 
-    - name: Update Version, Changelog, and Commit Changes
-      run: |
-        chmod +x .github/scripts/update_version_and_changelog.sh
-        .github/scripts/update_version_and_changelog.sh
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add pyproject.toml __init__.py CHANGELOG.md
-        git commit -m "Update version and changelog [skip ci]"
-        git tag $(poetry version -s)
-        git push origin HEAD:main --tags
+    - name: Version Bump and Changelog
+      run: poetry run semantic-release version
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and Publish to PyPI
-      env:
-        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API }}
-      run: |
-        poetry build
-        poetry publish
+      uses: pypa/gh-action-pypi-publish@v1.4.2
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API }}
+        packages_dir: dist
 
     - name: Create GitHub Release
+      run: poetry run semantic-release publish
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        TAG_VERSION=$(poetry version -s)
-        gh release create $TAG_VERSION --notes "Release notes here" -t $TAG_VERSION
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

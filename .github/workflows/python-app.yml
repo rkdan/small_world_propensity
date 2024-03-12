@@ -1,47 +1,65 @@
-name: Publish Package
+name: Small World Propensity
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # Important for semantic versioning to work correctly
+      - uses: actions/checkout@v3
+      - name: Install Poetry
+        run: pipx install poetry
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry"
+      - name: Install dependencies
+        run: poetry install
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install poetry
-        poetry install
-
-    - name: Version Bump and Changelog
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        poetry run semantic-release version --verbosity=DEBUG
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build package
-      run: poetry build
-
-    - name: Publish to PyPI
-      uses: pypa/gh-action-pypi-publish@v1.4.2
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API }}
-        packages_dir: dist
-
-    - name: Create GitHub Release
-      run: poetry run semantic-release publish
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    needs: build
+    permissions:
+      packages: write
+      pull-requests: write
+      contents: write
+      repository-projects: write
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install Poetry
+        run: pipx install poetry
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry"
+      - name: Install dependencies
+        run: poetry install
+      - name: Prepare package for release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          poetry run semantic-release publish
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API }}

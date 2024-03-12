@@ -74,6 +74,11 @@ jobs:
           version=$(poetry version --short)
           echo "Version: $version"
           echo "::set-output name=version::$version"
+      - name: Commit and Push Changes
+        run: |
+          git add pyproject.toml small_world_propensity/__init__.py CHANGELOG.md
+          git commit -m "chore(release): update versions and changelog [skip ci]"
+          git push origin ${GITHUB_REF#refs/heads/}
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

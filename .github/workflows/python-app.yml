@@ -31,7 +31,10 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and Publish to PyPI
+    - name: Build package
+      run: poetry build
+
+    - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@v1.4.2
       with:
         user: __token__

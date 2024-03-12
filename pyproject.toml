@@ -49,7 +49,7 @@ version_variable = [
     "small_world_propensity/__init__.py:__version__",
     "pyproject.toml:version",
 ]
-version_source = "commit"
+version_source = "tag"
 upload_to_pypi = "false"
 
 [build-system]

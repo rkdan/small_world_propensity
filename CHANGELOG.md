@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.18 (2024-03-12)
+
+
+
+**[See all commits in this version](https://github.com/rkdan/small_world_propensity/compare/v0.1.17...v0.1.18)**
+
 ## v0.1.17 (2024-03-12)
 
 

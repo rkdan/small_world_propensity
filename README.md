@@ -16,7 +16,7 @@ python -m pip install small-world-propensity
 ![Dataframe](https://github.com/rkdan/small_world_propensity/blob/main/img/dataframe.png?raw=True)
 
 ## Generation of regular and random matrices
-Using the structural network of the cat cortex obtained from tract-tracing studies between 52 brain regions, we can visualize the process behind the calculation of $\phi$. The matrix is loaded using
+Using the structural network of the cat cortex obtained from tract-tracing studies between 52 brain regions, we can visualize the process behind the calculation of the small-world propensity, $\phi$. The matrix is loaded using
 
 ```
 cat = sio.loadmat('data/cat.mat')['CIJctx']

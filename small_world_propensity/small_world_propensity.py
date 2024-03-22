@@ -56,6 +56,7 @@ def get_average_paths(W: np.ndarray) -> float:
         float: Average path length of the network.
     """
     path_matrix = csgraph.shortest_path(1/W, directed=False, unweighted=False)
+    path_matrix[np.isinf(path_matrix)] = 0
     L_W = np.triu(path_matrix).sum() / (len(W) * (len(W) - 1) / 2)
 
     return L_W

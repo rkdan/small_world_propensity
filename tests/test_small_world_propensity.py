@@ -43,6 +43,11 @@ class TestSmallWorldPropensity(unittest.TestCase):
         self.assertEqual(result.shape, (1, 11))
         self.assertTrue(np.all(0 <= result['SWP'].values <= 1))
 
+        # test values from swp dataframe
+        reference_values = np.array([0.27, 3.57,	0.17, 0.25, 0.78, 0.97, 0.24, 0.30, 0.14, 5.88, 2.79])
+        swp_values = result.values[0]
+        self.assertTrue(np.allclose(swp_values, reference_values, atol=0.1))
+
 
     def test_small_world_propensity_list_of_matrices(self):
         W1 = make_symmetric(self.cat)

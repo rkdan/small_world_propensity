@@ -1,5 +1,3 @@
-# Probably a bad idea...
-import warnings
 from typing import Union
 
 import numpy as np
@@ -7,7 +5,6 @@ import pandas as pd
 import tqdm
 from scipy.sparse import csgraph
 
-warnings.filterwarnings("ignore", category=RuntimeWarning) 
 
 gen = np.random.default_rng(1337)
 

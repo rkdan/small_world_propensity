@@ -6,8 +6,6 @@ import tqdm
 from scipy.sparse import csgraph
 
 
-gen = np.random.default_rng(1337)
-
 def small_world_propensity(
     W: Union[np.ndarray, list], bin: Union[bool, list] = False
 ) -> pd.DataFrame:
@@ -35,7 +33,7 @@ def small_world_propensity(
 
 def get_avg_rad_eff(W: np.ndarray) -> int:
     n = len(W)
-    num_con = len(np.where(W > 0)[0])
+    num_con = np.sum(W > 0)
     avg_deg_unw = num_con / n
     avg_rad_unw = avg_deg_unw / 2
     avg_rad_eff = np.ceil(avg_rad_unw)
@@ -195,7 +193,7 @@ def randomize_matrix(A: np.ndarray) -> np.ndarray:
     return A_rand
 
 
-def regular_matrix_generator(G: np.ndarray, r: int) -> np.ndarray:
+def regular_matrix_generator(G: np.ndarray, r: int, seed=42) -> np.ndarray:
     """Generate a regular matrix from a given matrix.
 
     Args:
@@ -217,6 +215,7 @@ def regular_matrix_generator(G: np.ndarray, r: int) -> np.ndarray:
 
     M = np.zeros((n, n))
 
+    gen = np.random.default_rng(seed)
     for i in range(n):
         for z in range(r):
             a = gen.integers(0, n)
